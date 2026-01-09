@@ -1,10 +1,23 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { phonesData } from '../data/phone';
 
 function ResultsPage() {
   const { range } = useParams();
   const data = phonesData[range];
+  const [modalOpen, setmodalOpen] = useState(false);
+  const [selectedPhone, setSelectedPhone]= useState(null);
+
+
+  const handleViewDetails = (phone) => {
+    setSelectedPhone(phone);
+    setmodalOpen(true);
+  }
+
+  const handleCloseModal = () =>{
+    setmodalOpen(false);
+    setSelectedPhone(null);
+  }
 
   // Error handling
   if (!data) {
@@ -29,9 +42,9 @@ function ResultsPage() {
   }
  
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-300">
       {/* Header */}
-      <nav className=" ">
+      <nav className="">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <Link to="/">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1877F2] hover:opacity-80 transition">
@@ -54,10 +67,10 @@ function ResultsPage() {
       </div>
 
       {/* Content Area */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 mt-8">
+      <div className=" px-4 sm:px-6 lg:px-8 py-8 mt-8">
         
         {/* Top Pick Section */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 rounded-2xl shadow-xl border-2 border-gray-100 hover:border-[#1877F2] transition-all duration-300">
+        <div className="bg-white max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 rounded-2xl shadow-xl border-2 border-gray-100 hover:border-[#1877F2] transition-all duration-300">
           
           {/* Title */}
           <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-8 text-[#1877F2]">
@@ -105,7 +118,7 @@ function ResultsPage() {
 
                 {/* Trade-offs Warning Box */}
                 {data.topPick.tradeOffs && (
-                  <div className="mb-4">
+                  <div className="bg-orange-50 border-l-4 border-orange-400 p-3 rounded-r mb-4">
                     <div className="flex gap-2">
                       <span className="text-orange-600 flex-shrink-0">⚠️</span>
                       <span className="text-sm text-orange-800">
@@ -158,7 +171,7 @@ function ResultsPage() {
 
               {/* Action Buttons */}
               <div className="flex gap-3 mt-6">
-                <button className="flex-1 bg-[#1877F2] hover:bg-[#166FE5] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
+                <button onClick ={()=>handleViewDetails(phone)} className="flex-1 bg-[#1877F2] hover:bg-[#166FE5] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
                   See Details
                 </button>
                 <button className="flex-1 border-2 border-[#1877F2] text-[#1877F2] hover:bg-[#1877F2] hover:text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300">
@@ -171,35 +184,144 @@ function ResultsPage() {
           </div>
         </div>
 
-        {/* Featured Section - Placeholder */}
-      
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8  rounded-2xl shadow-2xl border-2 border-gray-100 hover:border-[#1877F2] transition-all duration-300">
-            <h1 className='text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-8 text-[#1877F2]'>Featured</h1>
+        {/* Featured Section */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8 rounded-2xl shadow-xl border-2 border-gray-100 hover:border-[#1877F2] transition-all duration-300">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-8 text-[#1877F2]">
+            📱 Other Solid Choices
+          </h1>
           
-           <div  className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 space-y-12'>
-              {data.featured.map((phone , index)=>{
-                return(
-                  <>
-             <div className='grid grid-cols-1 gap-6 
-                 p-6 rounded-2xl border border-gray-200 
-                 shadow-lg hover:shadow-xl transition'>
-                 <div className="flex items-center justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.featured.map((phone) => (
+              <div 
+                key={phone.id}
+                className="bg-white p-6 rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-2xl hover:border-[#1877F2] transition-all duration-300"
+              >
+                {/* Image */}
+                <div className="bg-gray-100 rounded-lg h-48 md:h-56 flex items-center justify-center mb-4">
+                  <span className="text-5xl">📱</span>
+                </div>
+
+                {/* Phone Name */}
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">
+                  {phone.name}
+                </h3>
+
+                {/* Price */}
+                <div className="text-xl md:text-2xl font-bold text-[#1877F2] mb-4">
+                  NPR {phone.price.toLocaleString()}
+                </div>
+
+                {/* Why Smart - First 3 Only */}
+                <ul className="space-y-2 mb-4">
+                  {phone.whySmart.slice(0, 3).map((reason, i) => (
+                    <li className="flex gap-2 text-sm" key={i}>
+                      <span className="text-green-600 font-bold flex-shrink-0">✓</span>
+                      <span className="text-gray-700 leading-relaxed">{reason}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Best For Badge */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="bg-blue-100 text-[#1877F2] px-2 py-1 rounded-full text-xs font-semibold">
+                    👤 Best For
+                  </span>
+                  <span className="text-xs text-gray-700 font-medium">
+                    {phone.bestFor}
+                  </span>
+                </div>
+
+                {/* View Details Button */}
+                <button onClick ={()=>handleViewDetails(phone)} className="w-full bg-[#1877F2] hover:bg-[#166FE5] text-white py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm">
+                  View Details
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hidden Gems Section - Placeholder */}
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8 rounded-2xl shadow-xl border-2 border-gray-100 hover:border-[#1877F2] transition-all duration-300">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold mb-8 text-[#1877F2]">
+           💎Hidden Gems
+          </h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.hiddenGems.map((phone) => (
+              <div 
+                key={phone.id}
+                className="bg-white p-6 rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-2xl hover:border-[#1877F2] transition-all duration-300"
+              >
+                {/* Image */}
+                <div className="bg-gray-100 rounded-lg h-48 md:h-56 flex items-center justify-center mb-4">
+                  <span className="text-5xl">📱</span>
+                </div>
+
+                {/* Phone Name */}
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">
+                  {phone.name}
+                </h3>
+
+                {/* Price */}
+                <div className="text-xl md:text-2xl font-bold text-[#1877F2] mb-4">
+                  NPR {phone.price.toLocaleString()}
+                </div>
+
+                {/* Why Smart - First 3 Only */}
+                <ul className="space-y-2 mb-4">
+                  {phone.whySmart.map((reason, i) => (
+                    <li className="flex gap-2 text-sm" key={i}>
+                      <span className="text-green-600 font-bold flex-shrink-0">✓</span>
+                      <span className="text-gray-700 leading-relaxed">{reason}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Best For Badge */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="bg-blue-100 text-[#1877F2] px-2 py-1 rounded-full text-xs font-semibold">
+                    👤 Best For
+                  </span>
+                  <span className="text-xs text-gray-700 font-medium">
+                    {phone.bestFor}
+                  </span>
+                </div>
+
+                {/* View Details Button */}
+                <button onClick ={()=>handleViewDetails(phone)} className="w-full bg-[#1877F2] hover:bg-[#166FE5] text-white py-2.5 px-4 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm">
+                  View Details
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+      {/* Modal that shows conditionally */}
+      {modalOpen && selectedPhone && (
+       <div className='flex items-center justify-center fixed inset-0 bg-black/40 backdrop-blur-sm  z-50'>
+        <div>
+            <div className="max-w-2xl max-h-[90vh] overflow-auto m-4 p-6 mx-auto shadow-2xl rounded-2xl bg-white border-2 border-gray-200 hover:border-[#1877F2]  ">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            
+            {/* LEFT SIDE - Image */}
+            <div className="flex items-center justify-center">
               <div className="bg-gray-100 rounded-lg w-full h-64 md:h-80 flex items-center justify-center">
                 <span className="text-6xl">📱</span>
               </div>
             </div>
-          
-
-           <div className="flex flex-col">
-             
+            
+            {/* RIGHT SIDE - Info */}
+            <div className="flex flex-col">
+              
               {/* Phone Name */}
               <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
-                {phone.name}
+                {selectedPhone.name}
               </h2>
               
               {/* Price */}
               <div className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#1877F2] mb-6">
-                NPR {phone.price.toLocaleString()}
+                NPR {selectedPhone.price.toLocaleString()}
               </div>
 
               {/* Why This is Smart Section */}
@@ -208,9 +330,9 @@ function ResultsPage() {
                   Why This is Smart:
                 </h4>
                 <ul className="space-y-2 mb-4">
-                  {phone.whySmart.map((reason, i) => {
+                  {selectedPhone.whySmart.map((reason, index) => {
                     return (
-                      <li className="flex gap-2 text-sm md:text-base" key={i}>
+                      <li className="flex gap-2 text-sm md:text-base" key={index}>
                         <span className="text-green-600 font-bold flex-shrink-0">✓</span> 
                         <span className="text-gray-700 leading-relaxed">{reason}</span>
                       </li>
@@ -219,12 +341,12 @@ function ResultsPage() {
                 </ul>
 
                 {/* Trade-offs Warning Box */}
-                {phone.tradeOffs && (
-                  <div className="mb-4">
+                {data.topPick.tradeOffs && (
+                  <div className="bg-orange-50 border-l-4 border-orange-400 p-3 rounded-r mb-4">
                     <div className="flex gap-2">
                       <span className="text-orange-600 flex-shrink-0">⚠️</span>
                       <span className="text-sm text-orange-800">
-                        <strong>Trade-off:</strong> {phone.tradeOffs}
+                        <strong>Trade-off:</strong> {selectedPhone.tradeOffs}
                       </span>
                     </div>
                   </div>
@@ -236,7 +358,7 @@ function ResultsPage() {
                     👤 Best For
                   </span>
                   <span className="text-sm md:text-base text-gray-700 font-medium">
-                    {phone.bestFor}
+                    {selectedPhone.bestFor}
                   </span>
                 </div>
               </div>
@@ -249,49 +371,40 @@ function ResultsPage() {
                 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
                   <span className="text-sm font-semibold text-gray-600">Processor:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.processor}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.processor}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">RAM:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.ram}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.ram}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">Storage:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.storage}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.storage}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">Display:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.display}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.display}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">Camera:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.camera}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.camera}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">Battery:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.battery}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.battery}</span>
                   
                   <span className="text-sm font-semibold text-gray-600">OS:</span>
-                  <span className="text-sm text-gray-900">{phone.specs.os}</span>
+                  <span className="text-sm text-gray-900">{selectedPhone.specs.os}</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 mt-6">
-                <button className="flex-1 bg-[#1877F2] hover:bg-[#166FE5] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
-                  See Details
-                </button>
-                <button className="flex-1 border-2 border-[#1877F2] text-[#1877F2] hover:bg-[#1877F2] hover:text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300">
-                  Compare
-                </button>
-              </div>
-
+             <button onClick={()=>handleCloseModal()} className='bg-red-500  mt-5 text-center px-2 py-1 rounded-full text-sm text-white hover:scale-105 transition-all duration-300'>Close</button>
             </div>
-             </div>
-             
-            </>  
-                )
-              })}
-           </div>
+            
+          </div>
+        </div>  
         </div>
-        
-        {/* Hidden Gems Section - Placeholder */}
-        {/* You'll build this next */}
+         
+       </div>
+      
+      )}
+        </div>
 
       </div>
     </div>
