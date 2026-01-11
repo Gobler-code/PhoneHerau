@@ -82,8 +82,12 @@ function ResultsPage() {
             
             {/* LEFT SIDE - Image */}
             <div className="flex items-center justify-center">
-              <div className="bg-gray-100 rounded-lg w-full h-64 md:h-80 flex items-center justify-center">
-                <span className="text-6xl">📱</span>
+              <div className="bg-white rounded-lg w-full h-64 md:h-80 flex items-center justify-center">
+                <img 
+                     src={data.topPick.image} 
+                     alt={data.topPick.name}
+                     className="w-full h-full object-contain"
+                    />
               </div>
             </div>
             
@@ -171,9 +175,7 @@ function ResultsPage() {
 
               {/* Action Buttons */}
               <div className="flex gap-3 mt-6">
-                <button onClick ={()=>handleViewDetails(phone)} className="flex-1 bg-[#1877F2] hover:bg-[#166FE5] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
-                  See Details
-                </button>
+                
                 <button className="flex-1 border-2 border-[#1877F2] text-[#1877F2] hover:bg-[#1877F2] hover:text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300">
                   Compare
                 </button>
@@ -198,7 +200,13 @@ function ResultsPage() {
               >
                 {/* Image */}
                 <div className="bg-gray-100 rounded-lg h-48 md:h-56 flex items-center justify-center mb-4">
-                  <span className="text-5xl">📱</span>
+                  
+                    <img 
+                     src={phone.image} 
+                     alt={phone.name}
+                     className="w-full h-full object-contain"
+                    />
+                  
                 </div>
 
                 {/* Phone Name */}
@@ -254,7 +262,12 @@ function ResultsPage() {
               >
                 {/* Image */}
                 <div className="bg-gray-100 rounded-lg h-48 md:h-56 flex items-center justify-center mb-4">
-                  <span className="text-5xl">📱</span>
+                  
+                     <img 
+                      src={phone.image} 
+                      alt={phone.name}
+                       className="w-full h-full object-contain"/>
+                  
                 </div>
 
                 {/* Phone Name */}
@@ -296,13 +309,27 @@ function ResultsPage() {
           </div>
         </div>
 
-        <div>
-      {/* Modal that shows conditionally */}
-      {modalOpen && selectedPhone && (
-       <div className='flex items-center justify-center fixed inset-0 bg-black/40 backdrop-blur-sm  z-50'>
-        <div>
-            <div className="max-w-2xl max-h-[90vh] overflow-auto m-4 p-6 mx-auto shadow-2xl rounded-2xl bg-white border-2 border-gray-200 hover:border-[#1877F2]  ">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+
+<div>
+  {/* Modal that shows conditionally */}
+  {modalOpen && selectedPhone && (
+    <div 
+      className='flex items-center justify-center fixed inset-0 bg-black/40 backdrop-blur-sm z-50'
+      onClick={handleCloseModal} // Close when clicking outside
+    >
+      <div onClick={(e) => e.stopPropagation()}> {/* Prevent closing when clicking inside */}
+        <div className="max-w-2xl max-h-[90vh] overflow-auto m-4 p-6 mx-auto shadow-2xl rounded-2xl bg-white border-2 border-gray-200 hover:border-[#1877F2] relative">
+          
+          {/* Close Button at Top Right */}
+          <button 
+            onClick={handleCloseModal}
+            className="sticky -top-3 right-4 w-8 h-8 flex items-center justify-center rounded-full  hover:bg-red-500 hover:text-white transition-all duration-300 text-red-500 font-bold text-2xl"
+            aria-label="Close"
+          >
+            ×
+          </button>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             
             {/* LEFT SIDE - Image */}
             <div className="flex items-center justify-center">
@@ -341,7 +368,7 @@ function ResultsPage() {
                 </ul>
 
                 {/* Trade-offs Warning Box */}
-                {data.topPick.tradeOffs && (
+                {selectedPhone.tradeOffs && (
                   <div className="bg-orange-50 border-l-4 border-orange-400 p-3 rounded-r mb-4">
                     <div className="flex gap-2">
                       <span className="text-orange-600 flex-shrink-0">⚠️</span>
@@ -392,19 +419,18 @@ function ResultsPage() {
                   <span className="text-sm text-gray-900">{selectedPhone.specs.os}</span>
                 </div>
               </div>
-
-              {/* Action Buttons */}
-             <button onClick={()=>handleCloseModal()} className='bg-red-500  mt-5 text-center px-2 py-1 rounded-full text-sm text-white hover:scale-105 transition-all duration-300'>Close</button>
+                  {/* Action Buttons */}
+             <button onClick={()=>handleCloseModal()} className='bg-red-500  mt-5 md:hidden text-center px-2 py-1 rounded-full text-sm text-white hover:scale-105 transition-all duration-300'>Close</button>
+            
+            
             </div>
             
           </div>
         </div>  
-        </div>
-         
-       </div>
-      
-      )}
-        </div>
+      </div>
+    </div>
+  )}
+</div>
 
       </div>
     </div>
