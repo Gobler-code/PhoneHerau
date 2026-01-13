@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { phonesData } from '../data/phone';
+import Footer from './footer';
 
 function ResultsPage() {
   const { range } = useParams();
@@ -433,6 +434,7 @@ function ResultsPage() {
 </div>
 
       </div>
+      <Footer/>
     </div>
   );
 }
