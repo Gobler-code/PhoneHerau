@@ -20,6 +20,10 @@ function ResultsPage() {
     setSelectedPhone(null);
   }
 
+   const handleQuickBudget = (range) => {
+    navigate(`/results/${range}`);
+  };
+
   // Error handling
   if (!data) {
     return (
@@ -335,7 +339,11 @@ function ResultsPage() {
             {/* LEFT SIDE - Image */}
             <div className="flex items-center justify-center">
               <div className="bg-gray-100 rounded-lg w-full h-64 md:h-80 flex items-center justify-center">
-                <span className="text-6xl">📱</span>
+                 <img 
+                     src={selectedPhone.image} 
+                     alt={selectedPhone.name}
+                     className="w-full h-full object-contain"
+                    />
               </div>
             </div>
             
@@ -431,8 +439,51 @@ function ResultsPage() {
       </div>
     </div>
   )}
-</div>
+    </div>
 
+    {/* Navigation */}
+
+   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-10 transition-all duration-300">
+  <h2 className='text-2xl md:text-4xl text-center font-bold mb-8 text-[#1877F2]'>
+    Explore phone of other price range
+  </h2>
+
+  <div className="space-y-4 sm:space-y-5 mb-12 sm:mb-16 lg:mb-20">
+    <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4 justify-center">
+      {['20k - 30k', '30k - 40k', '40k - 50k', '50k - 70k',  '70k - 100k+'].map((displayText, index) => {
+        const rangeMap = ['20k-30k', '30k-40k', '40k-50k', '50k-70k','70k-100k'];
+        const rangeValue = rangeMap[index];
+        const isActive = rangeValue === range; // Check if this is current range
+        
+        return (
+          <Link key={index} to={`/results/${rangeValue}`}>
+            <button
+              className={`
+                px-4 sm:px-6 lg:px-8 
+                py-2 sm:py-3 lg:py-4 
+                text-sm sm:text-base lg:text-lg 
+                font-semibold 
+                rounded-full 
+                shadow-lg 
+                hover:shadow-xl 
+                hover:scale-105 
+                transition-all 
+                duration-300 
+                border-2 
+                 ${isActive 
+                  ? 'bg-[#1877F2] text-white border-[#1877F2]' 
+                  : 'bg-white text-[#1877F2] border-[#1877F2] hover:bg-[#1877F2] hover:text-white'
+                }
+              `}
+            >
+              {displayText}
+            </button>
+          </Link>
+        );
+      })}
+    </div>
+  </div>
+</div>
       </div>
       <Footer/>
     </div>
