@@ -16,7 +16,7 @@ function Footer(){
             <div className="space-y-2 sm:space-y-3">
               <h4 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4">Quick Links</h4>
               <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm lg:text-base text-blue-100">
-                <li><a href="#" className="hover:text-white transition-colors duration-200">Home</a></li>
+                <li><a href="/" className="hover:text-white transition-colors duration-200">Home</a></li>
                 <li><a href="#" className="hover:text-white transition-colors duration-200">All Phones</a></li>
                 <li><a href="#" className="hover:text-white transition-colors duration-200">Compare</a></li>
                 <li><a href="#" className="hover:text-white transition-colors duration-200">About Us</a></li>
